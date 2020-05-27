@@ -85,7 +85,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         });
 
         stopButton.addActionListener(e -> {
-            producer.interrupt();
+            producer.setDone(true);
             randomCharacterDisplayCanvas.setDone(true);
         });
 

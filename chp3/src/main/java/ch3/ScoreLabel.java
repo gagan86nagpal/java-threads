@@ -30,6 +30,9 @@ public class ScoreLabel extends JLabel implements CharacterListener {
         this(null, null);
     }
 
+    /**
+     * setter of generator
+     */
     public synchronized void resetGenerator(CharacterSource generator_) {
         if (null != generator) {
             generator.removeCharacterListener(this);
@@ -39,6 +42,10 @@ public class ScoreLabel extends JLabel implements CharacterListener {
             generator.addCharacterListener(this);
         }
     }
+
+    /**
+     * setter of typist
+     */
 
     public synchronized void resetTypist(CharacterSource typist_) {
         if (null != typist) {
@@ -50,6 +57,9 @@ public class ScoreLabel extends JLabel implements CharacterListener {
         }
     }
 
+    /**
+     * called at initialisation of app
+     */
     public synchronized void resetScore() {
         score = 0;
         char2Type = -1;
@@ -64,7 +74,7 @@ public class ScoreLabel extends JLabel implements CharacterListener {
 
     @Override
     public synchronized void newCharacter(CharacterEvent ce) {
-        // previous character check (not typed)
+        // is user hasn't typed previous character
         if (ce.characterSource == generator) {
             if (char2Type != -1) {
                 score--;
@@ -73,7 +83,9 @@ public class ScoreLabel extends JLabel implements CharacterListener {
             char2Type = ce.character;
 
         } else {
-            // If character is extraneous: 1-point penalty // If character does not match: 1-point penalty
+            // if user has typed, check it against the current generator.
+            // if matched, then unset the point.
+            // is char2Type is -1, that means user has typed at least an extra character to that of generator
             if (char2Type != ce.character) {
                 score--;
             } else {

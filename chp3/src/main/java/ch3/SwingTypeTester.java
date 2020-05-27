@@ -45,8 +45,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
     private void initComponents() {
         handler = new CharacterEventHandler();
         randomCharacterDisplayCanvas = new AnimatedCharacterDisplayCanvas();
-        typedCharacterFeedbackCanvas = new CharacterDisplayCanvas();
-        addCharacterListener(typedCharacterFeedbackCanvas);
+        typedCharacterFeedbackCanvas = new CharacterDisplayCanvas(this);
         JButton quitButton = new JButton();
         startButton = new JButton();
         stopButton = new JButton();
@@ -59,7 +58,6 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         JPanel scorePanel = new JPanel();
         scoreLabel = new ScoreLabel();
         scorePanel.add(scoreLabel);
-        p.add(scoreLabel);
         p.add(startButton);
         p.add(quitButton);
         p.add(stopButton);
@@ -99,7 +97,8 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         });
 
         stopButton.addActionListener(e -> {
-            producer.interrupt();
+            producer.setDone(true);
+            System.out.println("i just interrupted producer thread, isProducerThreadInterrupted:" + producer.isInterrupted());
             randomCharacterDisplayCanvas.setDone(true);
             scoreLabel.resetScore();
         });
