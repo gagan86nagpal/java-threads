@@ -28,7 +28,7 @@ public class RandomCharacterGenerator extends Thread implements CharacterSource 
     }
 
     public int getPauseTime() {
-        return (int) (Math.max(1000, 5000 * random.nextDouble()));
+        return (int) (Math.max(1000, 1000 * random.nextDouble()));
     }
 
     public void addCharacterListener(CharacterListener cl) {

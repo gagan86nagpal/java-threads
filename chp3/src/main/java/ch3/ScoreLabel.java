@@ -1,3 +1,5 @@
+package ch3;
+
 import ch2.CharacterEvent;
 import ch2.CharacterListener;
 import ch2.CharacterSource;
@@ -8,7 +10,7 @@ import javax.swing.*;
  * @author gagandeep.nagpal
  **/
 public class ScoreLabel extends JLabel implements CharacterListener {
-    private final CharacterSource typist;
+    private CharacterSource typist;
     private int score = 0;
     private int char2Type = -1;
     private CharacterSource generator;
@@ -42,7 +44,7 @@ public class ScoreLabel extends JLabel implements CharacterListener {
         if (null != typist) {
             typist.removeCharacterListener(this);
         }
-        generator = typist_;
+        typist = typist_;
         if (null != typist) {
             typist.addCharacterListener(this);
         }
