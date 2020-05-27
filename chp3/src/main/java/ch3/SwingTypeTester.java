@@ -33,7 +33,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
     private JButton stopButton;
     private CharacterEventHandler handler;
 
-    private ScoreLabel scoreLabel;
+    private ScoreLabelLockVersion scoreLabel;
     public SwingTypeTester() {
         initComponents();
     }
@@ -56,7 +56,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         quitButton.setText("Quit");
         stopButton.setText("Stop");
         JPanel scorePanel = new JPanel();
-        scoreLabel = new ScoreLabel();
+        scoreLabel = new ScoreLabelLockVersion();
         scorePanel.add(scoreLabel);
         p.add(startButton);
         p.add(quitButton);

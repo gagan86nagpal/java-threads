@@ -67,9 +67,7 @@ public class ScoreLabel extends JLabel implements CharacterListener {
     }
 
     private synchronized void setScore() {
-        SwingUtilities.invokeLater(() -> {
-            setText(Integer.toString(score));
-        });
+        SwingUtilities.invokeLater(() -> setText(Integer.toString(score)));
     }
 
     @Override
