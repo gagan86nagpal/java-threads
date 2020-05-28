@@ -71,7 +71,8 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
             producer = new RandomCharacterGenerator();
             // here it means that when producer produces, displayCanvas will show it.
             randomCharacterDisplayCanvas.setCharacterSource(producer);
-
+            // setting done as false, will start the animation
+            randomCharacterDisplayCanvas.setDone(false);
             // runs the thread
             Thread t = new Thread(producer);
             t.start( );
@@ -85,6 +86,8 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         });
 
         stopButton.addActionListener(e -> {
+            startButton.setEnabled(true);
+            stopButton.setEnabled(false);
             producer.setDone(true);
             randomCharacterDisplayCanvas.setDone(true);
         });

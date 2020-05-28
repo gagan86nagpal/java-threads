@@ -1,12 +1,11 @@
-package ch3;
+package chp4;
 
-
-import ch2.AnimatedCharacterDisplayCanvas;
 import ch2.CharacterDisplayCanvas;
 import ch2.CharacterEventHandler;
 import ch2.CharacterListener;
 import ch2.CharacterSource;
 import ch2.RandomCharacterGenerator;
+import ch3.ScoreLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,10 +80,9 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
             producer = new RandomCharacterGenerator();
             // here it means that when producer produces, displayCanvas will show it.
             randomCharacterDisplayCanvas.setCharacterSource(producer);
+
             scoreLabel.resetGenerator(producer);
             scoreLabel.resetTypist(this);
-            // setting done as false, will start the animation
-            randomCharacterDisplayCanvas.setDone(false);
             // runs the thread
             Thread t = new Thread(producer);
             t.start( );
@@ -92,6 +90,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
             startButton.setEnabled(false);
             stopButton.setEnabled(true);
 
+            randomCharacterDisplayCanvas.setDone(false);
             new Thread(randomCharacterDisplayCanvas).start();
             typedCharacterFeedbackCanvas.setEnabled(true);
             typedCharacterFeedbackCanvas.requestFocus();

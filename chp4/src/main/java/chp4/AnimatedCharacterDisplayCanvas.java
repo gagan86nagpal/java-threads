@@ -1,4 +1,9 @@
-package ch2;
+package chp4;
+
+import ch2.CharacterDisplayCanvas;
+import ch2.CharacterEvent;
+import ch2.CharacterListener;
+import ch2.CharacterSource;
 
 import java.awt.*;
 
@@ -7,8 +12,9 @@ import java.awt.*;
  **/
 public class AnimatedCharacterDisplayCanvas extends CharacterDisplayCanvas
         implements CharacterListener, Runnable {
-    private volatile boolean done = false;
+    private boolean done = false;
     private int curX = 0;
+    private Thread timer;
 
     public AnimatedCharacterDisplayCanvas() {
     }
@@ -33,20 +39,29 @@ public class AnimatedCharacterDisplayCanvas extends CharacterDisplayCanvas
                 curX++, fontHeight);
     }
 
-    public void run() {
-        while (!done) {
-            repaint();
+    public synchronized void run() {
+        while (true) {
             try {
-                Thread.sleep(100);
+                if (done) {
+                    wait();
+                } else {
+                    repaint();
+                    wait(100);
+                }
             } catch (InterruptedException ie) {
                 return;
             }
         }
-        System.out.println("Animated thread just exited");
     }
 
-    public void setDone(boolean b) {
+    public synchronized void setDone(boolean b) {
         done = b;
+        if (timer == null) {
+            timer = new Thread(this);
+            timer.start();
+        }
+        if (!done)
+            notify();
     }
 
 
