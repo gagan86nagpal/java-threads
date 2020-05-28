@@ -1,5 +1,12 @@
-package ch2;
+package ch3;
 
+
+import ch2.AnimatedCharacterDisplayCanvas;
+import ch2.CharacterDisplayCanvas;
+import ch2.CharacterEventHandler;
+import ch2.CharacterListener;
+import ch2.CharacterSource;
+import ch2.RandomCharacterGenerator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +14,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.*;
 
 /**
  * @author gagandeep.nagpal
@@ -27,6 +33,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
     private JButton stopButton;
     private CharacterEventHandler handler;
 
+    private ScoreLabel scoreLabel;
     public SwingTypeTester() {
         initComponents();
     }
@@ -38,8 +45,7 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
     private void initComponents() {
         handler = new CharacterEventHandler();
         randomCharacterDisplayCanvas = new AnimatedCharacterDisplayCanvas();
-        typedCharacterFeedbackCanvas = new CharacterDisplayCanvas();
-        addCharacterListener(typedCharacterFeedbackCanvas);
+        typedCharacterFeedbackCanvas = new CharacterDisplayCanvas(this);
         JButton quitButton = new JButton();
         startButton = new JButton();
         stopButton = new JButton();
@@ -49,10 +55,14 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
         startButton.setText("Start");
         quitButton.setText("Quit");
         stopButton.setText("Stop");
+        JPanel scorePanel = new JPanel();
+        scoreLabel = new ScoreLabel();
+        scorePanel.add(scoreLabel);
         p.add(startButton);
         p.add(quitButton);
         p.add(stopButton);
         add(p, BorderLayout.SOUTH);
+        add(scorePanel, BorderLayout.WEST);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
                 quit();
@@ -71,6 +81,8 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
             producer = new RandomCharacterGenerator();
             // here it means that when producer produces, displayCanvas will show it.
             randomCharacterDisplayCanvas.setCharacterSource(producer);
+            scoreLabel.resetGenerator(producer);
+            scoreLabel.resetTypist(this);
             // setting done as false, will start the animation
             randomCharacterDisplayCanvas.setDone(false);
             // runs the thread
@@ -89,7 +101,9 @@ public class SwingTypeTester extends JFrame implements CharacterSource {
             startButton.setEnabled(true);
             stopButton.setEnabled(false);
             producer.setDone(true);
+            System.out.println("i just interrupted producer thread, isProducerThreadInterrupted:" + producer.isInterrupted());
             randomCharacterDisplayCanvas.setDone(true);
+            scoreLabel.resetScore();
         });
 
         quitButton.addActionListener(evt -> quit());

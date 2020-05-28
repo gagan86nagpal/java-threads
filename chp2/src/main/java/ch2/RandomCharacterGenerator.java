@@ -12,6 +12,7 @@ import java.util.Random;
  */
 public class RandomCharacterGenerator extends Thread implements CharacterSource {
 
+    private volatile boolean done = false;
     static char[] chars;
     static String charArray = "abcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -46,7 +47,7 @@ public class RandomCharacterGenerator extends Thread implements CharacterSource 
 
     @SuppressWarnings("BusyWait")
     public void run() {
-        while(!isInterrupted()) {
+        while(!done) {
             nextCharacter();
             try {
                 Thread.sleep(getPauseTime());
@@ -54,5 +55,9 @@ public class RandomCharacterGenerator extends Thread implements CharacterSource 
                 return;
             }
         }
+    }
+
+    public void setDone(boolean b) {
+        done = b;
     }
 }
