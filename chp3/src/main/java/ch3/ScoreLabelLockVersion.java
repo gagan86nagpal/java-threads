@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  **/
 public class ScoreLabelLockVersion extends JLabel implements CharacterListener {
     // custom lock
-    private Lock scoreLock = new ReentrantLock();
+    private final Lock scoreLock = new ReentrantLock();
     private CharacterSource typist;
     private int score = 0;
     private int char2Type = -1;
@@ -94,29 +94,38 @@ public class ScoreLabelLockVersion extends JLabel implements CharacterListener {
         }
     }
 
+
+    private void newGeneratorCharacter(CharacterEvent ce) {
+        if (char2Type != -1) {
+            score--;
+            setScore();
+        }
+        char2Type = ce.character;
+    }
+
+
+    private void newTypistCharacter(CharacterEvent ce) {
+        if (char2Type != ce.character) {
+            score--;
+        } else {
+            score++;
+            char2Type = -1;
+        }
+        setScore();
+    }
     @Override
     public void newCharacter(CharacterEvent ce) {
         try {
             scoreLock.lock();
             // is user hasn't typed previous character
             if (ce.characterSource == generator) {
-                if (char2Type != -1) {
-                    score--;
-                    setScore();
-                }
-                char2Type = ce.character;
+                newGeneratorCharacter(ce);
 
             } else {
                 // if user has typed, check it against the current generator.
                 // if matched, then unset the point.
                 // is char2Type is -1, that means user has typed at least an extra character to that of generator
-                if (char2Type != ce.character) {
-                    score--;
-                } else {
-                    score++;
-                    char2Type = -1;
-                }
-                setScore();
+                newTypistCharacter(ce);
             }
         } finally {
             scoreLock.unlock();
