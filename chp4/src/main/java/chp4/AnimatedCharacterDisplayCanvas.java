@@ -3,7 +3,6 @@ package chp4;
 import ch2.CharacterDisplayCanvas;
 import ch2.CharacterEvent;
 import ch2.CharacterListener;
-import ch2.CharacterSource;
 
 import java.awt.*;
 
@@ -17,10 +16,6 @@ public class AnimatedCharacterDisplayCanvas extends CharacterDisplayCanvas
     private Thread timer;
 
     public AnimatedCharacterDisplayCanvas() {
-    }
-
-    public AnimatedCharacterDisplayCanvas(CharacterSource cs) {
-        super(cs);
     }
 
     public synchronized void newCharacter(CharacterEvent ce) {
